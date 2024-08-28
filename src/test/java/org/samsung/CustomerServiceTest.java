@@ -1,41 +1,40 @@
 package org.samsung;
 
-import static org.junit.Assert.assertTrue;
-import static org.testng.AssertJUnit.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
+public class CustomerServiceTest
 {
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
-    @Test
-    public void testCustomerName() {
-        Customer customer = new Customer();
-        customer.setName("Duke");
-        assertEquals("Duke", customer.getName());
+    private CustomerService customerService;
+
+    @BeforeEach
+    void setUp() {
+        customerService = new CustomerService();
     }
 
     @Test
-    public void testCustomerNumber() {
-        Customer customer = new Customer();
-        customer.setNumber("C042");
-        assertEquals("C042", customer.getNumber());
+    public void testAddCustomerWithUniqueEmail() {
+        customerService.addCustomer("John", "C001", "john@example.com");
+        assertEquals(1, customerService.getCustomers().size());
     }
 
     @Test
-    public void testCustomerEmail() {
-        Customer customer = new Customer();
-        customer.setEmail("duke@java.org");
-        assertEquals("duke@java.org", customer.getEmail());
+    public void testAddCustomerWithDuplicateEmail() {
+        customerService.addCustomer("John", "C001", "john@example.com");
+        customerService.addCustomer("Jane", "C002", "john@example.com");
+        assertEquals(1, customerService.getCustomers().size());
+    }
+
+    @Test
+    public void testGetCustomers() {
+        customerService.addCustomer("John", "C001", "john@example.com");
+        customerService.addCustomer("Jane", "C002", "jane@example.com");
+        assertEquals(2, customerService.getCustomers().size());
     }
 }
